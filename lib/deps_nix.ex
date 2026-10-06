@@ -225,7 +225,7 @@ defmodule DepsNix do
                   inherit (fenix) cargo rustc;
                 }).buildRustPackage
                   {
-                    pname = "${old.packageName}-native";
+                    pname = "${old.env.beamModuleName}-native";
                     version = old.version;
                     src = nativeDir;
                     cargoLock = {
@@ -269,12 +269,12 @@ defmodule DepsNix do
                   echo -n " "
                   grep -Rl 'use RustlerPrecompiled' lib \\
                     | xargs grep 'defmodule' \\
-                    | sed 's/defmodule \\(.*\\) do/config :${old.packageName}, \\1, skip_compilation?: true/'
+                    | sed 's/defmodule \\(.*\\) do/config :${old.env.beamModuleName}, \\1, skip_compilation?: true/'
                   echo "***********************************************"
                   exit 1
                 }
                 trap suggestion ERR
-                ${old.buildPhase}
+                ${old.buildPhase or "mixCompileHook"}
               '';
             };
         };
@@ -293,8 +293,8 @@ defmodule DepsNix do
                 {
                   name = "rustlerPrecompiled";
                   toolchain = {
-                    name = "nightly-2024-11-01";
-                    sha256 = "sha256-wq7bZ1/IlmmLkSa3GUJgK17dTWcKyf5A+ndS9yRwB88=";
+                    name = "nightly-2025-06-23";
+                    sha256 = "sha256-UAoZcxg3iWtS+2n8TFNfANFt/GmkuOMDf7QAE0fRxeA=";
                   };
                 }
               ];
